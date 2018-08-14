@@ -30,9 +30,6 @@ namespace CustomFarmingRedux
             set { _index = value; }
         }
 
-        public IngredientBlueprint()
-        {
-        }
 
         public IngredientBlueprint clone()
         {

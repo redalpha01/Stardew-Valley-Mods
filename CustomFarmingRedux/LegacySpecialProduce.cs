@@ -6,12 +6,12 @@ namespace CustomFarmingRedux
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public bool _useColor { get; set; } = false;
-        public bool _usePrefix { get; set; } = false;
-        public bool _useSuffix { get; set; } = false;
-        public bool uc = false;
-        public bool up = false;
-        public bool us = false;
+        public bool _useColor { get; set; }
+        public bool _usePrefix { get; set; }
+        public bool _useSuffix { get; set; }
+        public bool uc;
+        public bool up;
+        public bool us;
 
         public bool usePrefix
         {
