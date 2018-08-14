@@ -20,7 +20,7 @@ namespace CustomFarmingRedux
 
         public override string DisplayName
         {
-            get => (stack / 10f).ToString() + "l " + base.DisplayName.ToLower();
+            get => (stack / 10f) + "l " + base.DisplayName.ToLower();
             set => base.DisplayName = value;
         }
 

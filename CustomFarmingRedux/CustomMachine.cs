@@ -104,7 +104,7 @@ namespace CustomFarmingRedux
                     : new CustomObjectData(blueprint.fullid,
                         $"{blueprint.name}/{blueprint.price}/-300/Crafting -9/{blueprint.description}/true/true/0/{blueprint.name}",
                         blueprint.getTexture(), Color.White, blueprint.tileindex, true, typeof(CustomMachine),
-                        (blueprint.crafting == null || blueprint.crafting == "")
+                        (String.IsNullOrEmpty(blueprint.crafting))
                             ? null
                             : new CraftingData(blueprint.name, blueprint.crafting));
 

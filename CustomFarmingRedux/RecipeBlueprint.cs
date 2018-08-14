@@ -44,7 +44,7 @@ namespace CustomFarmingRedux
         {
             get
             {
-                if (_description == "" || _description == null)
+                if (String.IsNullOrEmpty(_description))
                     return Game1.objectInformation[index].Split('/')[5];
                 else
                     return _description;
@@ -136,7 +136,7 @@ namespace CustomFarmingRedux
         public int stack { get; set; } = 1;
         public int quality { get; set; } = 0;
 
-        public bool custom => (texture != null && texture != "") || (_description != null && _description != "");
+        public bool custom => (!String.IsNullOrEmpty(texture)) || (!String.IsNullOrEmpty(_description));
 
         public CustomMachineBlueprint mBlueprint;
         public Texture2D texture2d;
@@ -198,7 +198,7 @@ namespace CustomFarmingRedux
                 helper = Helper;
 
             if (texture2d == null)
-                if (texture == null || texture == "")
+                if (String.IsNullOrEmpty(texture))
                     texture2d = Game1.objectSpriteSheet;
                 else
                     texture2d = Helper.Content.Load<Texture2D>(
@@ -323,7 +323,7 @@ namespace CustomFarmingRedux
                 s.name = String.Join(" ", namesplit);
             }
 
-            if (s.name == null || s.name == "" || s.name == " ")
+            if (String.IsNullOrEmpty(s.name) || s.name == " ")
                 s.name = oName;
 
             int compPrice = (int) (PyUtils.calc(price,

@@ -165,9 +165,7 @@ namespace CustomFarmingRedux
 
             int R = (int) colors.toList(c => (int) c.R).Average();
             int G = (int) colors.toList(c => (int) c.G).Average();
-            ;
             int B = (int) colors.toList(c => (int) c.B).Average();
-            ;
 
             int nR = R;
             int nG = G;

@@ -156,7 +156,7 @@ namespace CustomFarmingRedux
                     if (blueprint.production != null)
                         foreach (RecipeBlueprint recipe in blueprint.production)
                         {
-                            if (recipe.texture != null && recipe.texture != "")
+                            if (!String.IsNullOrEmpty(recipe.texture))
                                 recipe.texture2d = recipe.getTexture(helper);
 
                             recipe.mBlueprint = blueprint;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using System;
+using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 using System.Collections.Generic;
@@ -59,7 +60,7 @@ namespace CustomFarmingRedux
                 helper = Helper;
 
             if (texture2d == null)
-                if (texture == null || texture == "")
+                if (String.IsNullOrEmpty(texture))
                     texture2d = Game1.objectSpriteSheet;
                 else
                     texture2d = helper.Content.Load<Texture2D>($"{pack.baseFolder}/{folder}/{texture}");
