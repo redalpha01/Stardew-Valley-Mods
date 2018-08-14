@@ -13,10 +13,7 @@ namespace CustomFarmingRedux
 
         public int id { get; set; }
 
-        public string fullid
-        {
-            get { return $"{folder}.{file}.{id}"; }
-        }
+        public string fullid => $"{folder}.{file}.{id}";
 
         public string name { get; set; }
         public bool asdisplay { get; set; } = false;

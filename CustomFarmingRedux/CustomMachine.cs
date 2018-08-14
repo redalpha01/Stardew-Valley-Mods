@@ -36,11 +36,8 @@ namespace CustomFarmingRedux
         private bool active = true;
         private bool wasBuild;
 
-        private bool isWorking
-        {
-            get => active && !readyForHarvest &&
+        private bool isWorking => active && !readyForHarvest &&
                    ((completionTime != null && activeRecipe != null) || blueprint.production == null);
-        }
 
         private string id;
         private string conditions;
@@ -71,7 +68,7 @@ namespace CustomFarmingRedux
 
                 return _frame;
             }
-            set { _frame = value; }
+            set => _frame = value;
         }
 
         public CustomMachine()

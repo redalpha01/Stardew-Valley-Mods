@@ -27,7 +27,7 @@ namespace CustomFarmingRedux
 
                 return _index;
             }
-            set { _index = value; }
+            set => _index = value;
         }
 
 

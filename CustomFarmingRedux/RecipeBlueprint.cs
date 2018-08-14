@@ -37,7 +37,7 @@ namespace CustomFarmingRedux
 
                 return _name;
             }
-            set { _name = value; }
+            set => _name = value;
         }
 
         public string description
@@ -49,7 +49,7 @@ namespace CustomFarmingRedux
                 else
                     return _description;
             }
-            set { _description = value; }
+            set => _description = value;
         }
 
         public string category
@@ -61,7 +61,7 @@ namespace CustomFarmingRedux
 
                 return _category;
             }
-            set { _category = value; }
+            set => _category = value;
         }
 
         public int index
@@ -104,7 +104,7 @@ namespace CustomFarmingRedux
 
                 return _index;
             }
-            set { _index = value; }
+            set => _index = value;
         }
 
         public bool bigcraftable { get; set; } = false;
@@ -123,7 +123,7 @@ namespace CustomFarmingRedux
                 else
                     return _tileindex;
             }
-            set { _tileindex = value; }
+            set => _tileindex = value;
         }
 
         public bool prefix { get; set; } = false;
@@ -136,10 +136,7 @@ namespace CustomFarmingRedux
         public int stack { get; set; } = 1;
         public int quality { get; set; } = 0;
 
-        public bool custom
-        {
-            get => (texture != null && texture != "") || (_description != null && _description != "");
-        }
+        public bool custom => (texture != null && texture != "") || (_description != null && _description != "");
 
         public CustomMachineBlueprint mBlueprint;
         public Texture2D texture2d;
