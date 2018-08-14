@@ -8,7 +8,7 @@ namespace CustomFarmingRedux
         public string folderName { get; set; }
         public string fileName { get; set; }
         public string baseFolder { get; set; } = CustomFarmingReduxMod.folder;
-        public bool legacy { get; set; } = false;
+        public bool legacy { get; set; }
         public string author { get; set; } = "none";
         public string version { get; set; } = "1.0.0";
         public string name { get; set; } = "Custom Farming Pack";

@@ -34,7 +34,7 @@ namespace CustomFarmingRedux
         private CustomMachineBlueprint blueprint;
 
         private bool active = true;
-        private bool wasBuild = false;
+        private bool wasBuild;
 
         private bool isWorking
         {
@@ -43,21 +43,21 @@ namespace CustomFarmingRedux
         }
 
         private string id;
-        private string conditions = null;
+        private string conditions;
         private STime completionTime;
         private int tileindex;
         private Rectangle tilesize = new Rectangle(0, 0, 16, 32);
-        private int _frame = 0;
+        private int _frame;
         private int skipFrame = 10;
-        private int animationFrames = 0;
-        private int counter = 0;
+        private int animationFrames;
+        private int counter;
         private RecipeBlueprint activeRecipe;
         private RecipeBlueprint starterRecipe;
         public GameLocation location;
         private CustomObjectData data;
         private bool meetsConditions = true;
-        private bool checkedToday = false;
-        private bool skipDrop = false;
+        private bool checkedToday;
+        private bool skipDrop;
 
         private int frame
         {

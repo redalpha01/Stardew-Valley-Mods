@@ -27,8 +27,8 @@ namespace CustomFarmingRedux
         public static IMonitor _monitor;
         public static List<CustomMachineBlueprint> machines = new List<CustomMachineBlueprint>();
         public static Config _config;
-        public static bool hasKisekae = false;
-        public static IMod kisekae = null;
+        public static bool hasKisekae;
+        public static IMod kisekae;
         public static string folder = "Machines";
         public static string legacyFolder = "MachinesCF1";
         internal static Dictionary<string, int> craftingrecipes = new Dictionary<string, int>();

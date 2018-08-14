@@ -7,7 +7,7 @@ namespace CustomFarmingRedux
     public class IngredientBlueprint
     {
         public int _index = -1;
-        public int quality { get; set; } = 0;
+        public int quality { get; set; }
         public int exactquality { get; set; } = -1;
         public int stack { get; set; } = 1;
         public string name { get; set; } = "";
