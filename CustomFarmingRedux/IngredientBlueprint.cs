@@ -11,7 +11,13 @@ namespace CustomFarmingRedux
         public int exactquality { get; set; } = -1;
         public int stack { get; set; } = 1;
         public string name { get; set; } = "";
-        public string item { get => name; set => name = value; } 
+
+        public string item
+        {
+            get => name;
+            set => name = value;
+        }
+
         public int index
         {
             get
@@ -21,17 +27,13 @@ namespace CustomFarmingRedux
 
                 return _index;
             }
-            set
-            {
-                _index = value;
-            }
+            set { _index = value; }
         }
 
         public IngredientBlueprint()
         {
-
         }
-        
+
         public IngredientBlueprint clone()
         {
             IngredientBlueprint clone = new IngredientBlueprint();

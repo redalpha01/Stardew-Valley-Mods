@@ -44,14 +44,16 @@ namespace CustomFarmingRedux
 
             if (hasKisekae)
             {
-                var registry = helper.ModRegistry.GetType().GetField("Registry", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(helper.ModRegistry);
-                System.Collections.IList list = (System.Collections.IList) registry.GetType().GetField("Mods", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(registry);
+                var registry = helper.ModRegistry.GetType()
+                    .GetField("Registry", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(helper.ModRegistry);
+                System.Collections.IList list = (System.Collections.IList) registry.GetType()
+                    .GetField("Mods", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(registry);
                 foreach (var m in list)
                 {
-                    IManifest mmanifest = (IManifest)m.GetType().GetProperty("Manifest").GetValue(m);
+                    IManifest mmanifest = (IManifest) m.GetType().GetProperty("Manifest").GetValue(m);
                     if (mmanifest.UniqueID == "Kabigon.kisekae")
                     {
-                        kisekae = (IMod)m.GetType().GetProperty("Mod").GetValue(m);
+                        kisekae = (IMod) m.GetType().GetProperty("Mod").GetValue(m);
                         break;
                     }
                 }
@@ -71,25 +73,32 @@ namespace CustomFarmingRedux
             harmonyFix();
             SaveHandler.addPreprocessor(legacyFix);
             SaveHandler.addReplacementPreprocessor(fixLegacyObject);
-            helper.ConsoleCommands.Add("replace_custom_farming", "Triggers Custom Farming Replacement", replaceCustomFarming);
+            helper.ConsoleCommands.Add("replace_custom_farming", "Triggers Custom Farming Replacement",
+                replaceCustomFarming);
 
-            if(_config.water)
+            if (_config.water)
             {
-                new CustomObjectData("Platonymous.Water", "Water/1/2/Cooking -7/Water/Plain drinking water./drink/0 0 0 0 0 0 0 0 0 0 0/0", Game1.objectSpriteSheet.getTile(247).setSaturation(0), Color.Aqua, type: typeof(WaterItem));
+                new CustomObjectData("Platonymous.Water",
+                    "Water/1/2/Cooking -7/Water/Plain drinking water./drink/0 0 0 0 0 0 0 0 0 0 0/0",
+                    Game1.objectSpriteSheet.getTile(247).setSaturation(0), Color.Aqua, type: typeof(WaterItem));
                 ButtonClick.ActionButton.onClick((pos) => clickedOnWateringCan(pos), (p) => convertWater());
             }
 
-            PyLua.registerType(typeof(CustomMachine),registerAssembly:true);
+            PyLua.registerType(typeof(CustomMachine), registerAssembly: true);
         }
 
         private bool clickedOnWateringCan(Point pos)
         {
-            if (Game1.activeClickableMenu is GameMenu g && g.currentTab == 0 && Game1.player.Items.ToList().Exists(i => i is WateringCan))
+            if (Game1.activeClickableMenu is GameMenu g && g.currentTab == 0 &&
+                Game1.player.Items.ToList().Exists(i => i is WateringCan))
             {
                 List<IClickableMenu> pages = _helper.Reflection.GetField<List<IClickableMenu>>(g, "pages").GetValue();
-                if (pages.Find(p => p is InventoryPage) is InventoryPage ip && ip.inventory.inventory.Exists(c => int.Parse(c.name) is int i && i > 0 && i < ip.inventory.actualInventory.Count &&  ip.inventory.actualInventory[i] is WateringCan && c.containsPoint(pos.X, pos.Y)))
+                if (pages.Find(p => p is InventoryPage) is InventoryPage ip && ip.inventory.inventory.Exists(c =>
+                        int.Parse(c.name) is int i && i > 0 && i < ip.inventory.actualInventory.Count &&
+                        ip.inventory.actualInventory[i] is WateringCan && c.containsPoint(pos.X, pos.Y)))
                     return true;
             }
+
             return false;
         }
 
@@ -97,19 +106,22 @@ namespace CustomFarmingRedux
         {
             Item item = Game1.player.Items.ToList().Find(i => i is WateringCan);
 
-            if(item is WateringCan wc)
+            if (item is WateringCan wc)
             {
-                List<IClickableMenu> pages = _helper.Reflection.GetField<List<IClickableMenu>>(Game1.activeClickableMenu, "pages").GetValue();
-                Item heldItem = _helper.Reflection.GetField<Item>(pages.Find(p => p is InventoryPage), "heldItem").GetValue();
-                
-          
+                List<IClickableMenu> pages = _helper.Reflection
+                    .GetField<List<IClickableMenu>>(Game1.activeClickableMenu, "pages").GetValue();
+                Item heldItem = _helper.Reflection.GetField<Item>(pages.Find(p => p is InventoryPage), "heldItem")
+                    .GetValue();
+
+
                 if (heldItem is WaterItem s && wc.WaterLeft < wc.waterCanMax)
                 {
                     int w = Math.Min(s.Stack, wc.waterCanMax - wc.WaterLeft);
                     s.Stack -= w;
-                    if(s.Stack <= 0)
-                        _helper.Reflection.GetField<Item>(pages.Find(p => p is InventoryPage), "heldItem").SetValue(null);
-                    
+                    if (s.Stack <= 0)
+                        _helper.Reflection.GetField<Item>(pages.Find(p => p is InventoryPage), "heldItem")
+                            .SetValue(null);
+
                     wc.WaterLeft += w;
                     Game1.playSound("slosh");
                     return;
@@ -118,7 +130,8 @@ namespace CustomFarmingRedux
                 {
                     int a = Math.Min(10, wc.WaterLeft);
                     wc.WaterLeft -= a;
-                    Game1.player.addItemByMenuIfNecessary(new SObject(CustomObjectData.getIndexForId("Platonymous.Water"), a));
+                    Game1.player.addItemByMenuIfNecessary(
+                        new SObject(CustomObjectData.getIndexForId("Platonymous.Water"), a));
                     Game1.playSound("glug");
                 }
             }
@@ -139,7 +152,8 @@ namespace CustomFarmingRedux
                 foreach (Item item in itemMenu.ItemsToGrabMenu.actualInventory)
                     if (item is Chest chest && machines.Exists(m => m.fullid == chest.name || m.legacy == chest.name))
                     {
-                        Item cf = new CustomMachine(machines.Find(m => m.fullid == chest.name || m.legacy == chest.name));
+                        Item cf = new CustomMachine(
+                            machines.Find(m => m.fullid == chest.name || m.legacy == chest.name));
                         additions.Add(cf);
                         remove.Add(item);
                     }
@@ -153,7 +167,8 @@ namespace CustomFarmingRedux
 
             if (param[0] == "shop" && Game1.activeClickableMenu is ShopMenu shop)
             {
-                Dictionary<Item, int[]> items = Helper.Reflection.GetField<Dictionary<Item, int[]>>(shop, "itemPriceAndStock").GetValue();
+                Dictionary<Item, int[]> items = Helper.Reflection
+                    .GetField<Dictionary<Item, int[]>>(shop, "itemPriceAndStock").GetValue();
                 List<Item> selling = Helper.Reflection.GetField<List<Item>>(shop, "forSale").GetValue();
                 List<Item> remove = new List<Item>();
                 List<Item> additions = new List<Item>();
@@ -161,8 +176,9 @@ namespace CustomFarmingRedux
                 foreach (Item i in selling)
                     if (i is Chest chest && machines.Exists(m => m.fullid == chest.name || m.legacy == chest.name))
                     {
-                        Item cf = new CustomMachine(machines.Find(m => m.fullid == chest.name || m.legacy == chest.name));
-                        items.Add(cf, new int[] { chest.preservedParentSheetIndex.Value, int.MaxValue });
+                        Item cf = new CustomMachine(
+                            machines.Find(m => m.fullid == chest.name || m.legacy == chest.name));
+                        items.Add(cf, new int[] {chest.preservedParentSheetIndex.Value, int.MaxValue});
                         additions.Add(cf);
                         remove.Add(i);
                     }
@@ -182,7 +198,6 @@ namespace CustomFarmingRedux
         {
             if (dataString.Contains("simpleMachine"))
             {
-
                 string[] data = SaveHandler.splitElemets(dataString);
                 Dictionary<string, string> additionalSaveData = new Dictionary<string, string>();
 
@@ -192,17 +207,20 @@ namespace CustomFarmingRedux
                     additionalSaveData.Add(entry[0], entry[1]);
                 }
 
-                string id = new DirectoryInfo(additionalSaveData["modfolder"]).Name + "." + additionalSaveData["filename"];
+                string id = new DirectoryInfo(additionalSaveData["modfolder"]).Name + "." +
+                            additionalSaveData["filename"];
                 CustomMachineBlueprint machine = machines.Find(m => m.legacy == id);
 
                 if (machine == null)
                     return dataString;
 
-                dataString = SaveHandler.newPrefix + SaveHandler.seperator + "Object" + SaveHandler.seperator + "CustomFarmingRedux.CustomMachine, CustomFarmingRedux" + SaveHandler.seperator + "id" + SaveHandler.valueSeperator + machine.fullid;
+                dataString = SaveHandler.newPrefix + SaveHandler.seperator + "Object" + SaveHandler.seperator +
+                             "CustomFarmingRedux.CustomMachine, CustomFarmingRedux" + SaveHandler.seperator + "id" +
+                             SaveHandler.valueSeperator + machine.fullid;
                 _monitor.Log("Legacy machine converted: " + dataString, LogLevel.Trace);
                 return dataString;
             }
-           
+
 
             return dataString;
         }
@@ -238,15 +256,20 @@ namespace CustomFarmingRedux
 
         private void MenuEvents_MenuChanged(object sender, EventArgsClickableMenuChanged e)
         {
-            if (Game1.activeClickableMenu is GameMenu activeMenu && Helper.Reflection.GetField<List<IClickableMenu>>(activeMenu, "pages").GetValue().Find(p => p is CraftingPage) is CraftingPage craftingPage)
+            if (Game1.activeClickableMenu is GameMenu activeMenu &&
+                Helper.Reflection.GetField<List<IClickableMenu>>(activeMenu, "pages").GetValue()
+                    .Find(p => p is CraftingPage) is CraftingPage craftingPage)
             {
                 foreach (CustomMachineBlueprint blueprint in machines.Where(m => m.crafting != null))
                     for (int i = 0; i < craftingPage.pagesOfCraftingRecipes.Count; i++)
                     {
-                        if (craftingPage.pagesOfCraftingRecipes[i].Find(k => k.Value.name == blueprint.fullid) is KeyValuePair<ClickableTextureComponent, CraftingRecipe> kv && kv.Value != null && kv.Key != null)
+                        if (craftingPage.pagesOfCraftingRecipes[i].Find(k => k.Value.name == blueprint.fullid) is
+                                KeyValuePair<ClickableTextureComponent, CraftingRecipe> kv && kv.Value != null &&
+                            kv.Key != null)
                         {
                             kv.Key.texture = blueprint.getTexture();
-                            kv.Key.sourceRect = Game1.getSourceRectForStandardTileSheet(kv.Key.texture, blueprint.tileindex, blueprint.tilewidth, blueprint.tileheight);
+                            kv.Key.sourceRect = Game1.getSourceRectForStandardTileSheet(kv.Key.texture,
+                                blueprint.tileindex, blueprint.tilewidth, blueprint.tileheight);
                             kv.Value.DisplayName = blueprint.name;
                             Helper.Reflection.GetField<string>(kv.Value, "description").SetValue(blueprint.description);
                         }
@@ -267,7 +290,7 @@ namespace CustomFarmingRedux
 
             List<CustomFarmingPack> legacyPacks = new List<CustomFarmingPack>();
             string legacyDir = Path.Combine(Helper.DirectoryPath, legacyFolder);
-            if(Directory.Exists(legacyDir) && new DirectoryInfo(legacyDir).GetDirectories().Length > 0)
+            if (Directory.Exists(legacyDir) && new DirectoryInfo(legacyDir).GetDirectories().Length > 0)
                 PyUtils.loadContentPacks(out legacyPacks, legacyDir, SearchOption.AllDirectories, Monitor);
 
             legacyPacks.useAll(l => l.baseFolder = legacyFolder);
@@ -281,7 +304,7 @@ namespace CustomFarmingRedux
                     packs.AddOrReplace(lPack);
                     continue;
                 }
-                    
+
                 string lid = lPack.folderName + "." + lPack.fileName;
 
                 bool exists = false;
@@ -292,7 +315,7 @@ namespace CustomFarmingRedux
                     Monitor.Log("Skipped legacy machine " + lid + " because a new version was found.", LogLevel.Trace);
                     continue;
                 }
-                    
+
                 CustomFarmingPack next = new CustomFarmingPack();
                 next.legacy = true;
                 next.author = lPack.author;
@@ -313,7 +336,7 @@ namespace CustomFarmingRedux
                 legacyMachine.texture = lPack.Tilesheet;
                 legacyMachine.fps = 6;
                 legacyMachine.showitem = lPack.displayItem;
-                legacyMachine.itempos = new int[] { lPack.displayItemX, lPack.displayItemY };
+                legacyMachine.itempos = new int[] {lPack.displayItemX, lPack.displayItemY};
                 legacyMachine.itemzoom = lPack.displayItemZoom;
                 legacyMachine.crafting = lPack.Crafting;
 
@@ -327,7 +350,7 @@ namespace CustomFarmingRedux
 
                 if (lPack.Produce != null && lPack.Produce.ProduceID <= 0)
                     legacyMachine.asdisplay = true;
-                
+
                 if (lPack.Produce != null && lPack.Produce.ProduceID > 0)
                 {
                     legacyMachine.production = new List<RecipeBlueprint>();
@@ -346,7 +369,7 @@ namespace CustomFarmingRedux
                     baseProduce.description = lPack.Produce.Description;
                     baseProduce.quality = lPack.Produce.Quality;
                     List<int> materials = lPack.Materials.ToList();
-                    baseProduce.materials = new List<IngredientBlueprint> { new IngredientBlueprint() };
+                    baseProduce.materials = new List<IngredientBlueprint> {new IngredientBlueprint()};
                     baseProduce.materials[0].index = materials[0];
                     baseProduce.materials[0].exactquality = lPack.Produce.MaterialQuality;
                     baseProduce.materials[0].stack = lPack.RequiredStack;
@@ -365,9 +388,10 @@ namespace CustomFarmingRedux
                             nextProduce.tileindex = pnext.TileIndex != -1 ? pnext.TileIndex : baseProduce.tileindex;
                             nextProduce.time = pnext.ProductionTime != -1 ? pnext.ProductionTime : baseProduce.time;
                             nextProduce.stack = pnext.Stack != -1 ? pnext.Stack : baseProduce.stack;
-                            nextProduce.description = pnext.Description != null ? pnext.Description : baseProduce._description;
+                            nextProduce.description =
+                                pnext.Description != null ? pnext.Description : baseProduce._description;
                             nextProduce.quality = pnext.Quality != -9 ? pnext.Quality : baseProduce.quality;
-                            nextProduce.materials = new List<IngredientBlueprint>() { new IngredientBlueprint() };
+                            nextProduce.materials = new List<IngredientBlueprint>() {new IngredientBlueprint()};
                             nextProduce.materials[0].index = pnext.Material;
                             nextProduce.materials[0].exactquality = pnext.MaterialQuality;
                             nextProduce.materials[0].stack = lPack.RequiredStack;
@@ -376,7 +400,8 @@ namespace CustomFarmingRedux
                         }
                     }
 
-                    baseProduce.materials[0].index = materials.Count > 0 ? materials[0] : baseProduce.materials[0].index;
+                    baseProduce.materials[0].index =
+                        materials.Count > 0 ? materials[0] : baseProduce.materials[0].index;
                     materials.Remove(baseProduce.materials[0].index);
                     baseProduce.include = materials.Count > 0 ? materials.ToArray() : null;
                     legacyMachine.production.Add(baseProduce);
@@ -387,29 +412,35 @@ namespace CustomFarmingRedux
             }
 
             foreach (CustomFarmingPack pack in packs)
-                foreach (CustomMachineBlueprint blueprint in pack.machines)
+            foreach (CustomMachineBlueprint blueprint in pack.machines)
+            {
+                blueprint.pack = pack;
+                machines.AddOrReplace(blueprint);
+
+                if (blueprint.production != null)
+                    foreach (RecipeBlueprint recipe in blueprint.production)
+                        recipe.mBlueprint = blueprint;
+                else if (blueprint.asdisplay)
                 {
-                    blueprint.pack = pack;
-                    machines.AddOrReplace(blueprint);
-
-                    if (blueprint.production != null)
-                        foreach (RecipeBlueprint recipe in blueprint.production)
-                            recipe.mBlueprint = blueprint;
-                    else if (blueprint.asdisplay)
-                    {
-                        blueprint.pulsate = false;
-                        blueprint.production = new List<RecipeBlueprint>();
-                        blueprint.production.Add(new RecipeBlueprint());
-                        blueprint.production[0].index = 0;
-                        blueprint.production[0].time = 0;
-                    }
-
-                    CustomObjectData data = new CustomObjectData(blueprint.fullid, $"{blueprint.name}/{blueprint.price}/-300/Crafting -9/{blueprint.description}/true/true/0/{blueprint.name}", blueprint.getTexture(), Color.White, blueprint.tileindex, true, typeof(CustomMachine), (blueprint.crafting == null || blueprint.crafting == "") ? null : new CraftingData(blueprint.fullid, blueprint.crafting));
-
-                    if (blueprint.forsale)
-                        new InventoryItem(new CustomMachine(blueprint), blueprint.price).addToNPCShop(blueprint.shop, blueprint.condition);
+                    blueprint.pulsate = false;
+                    blueprint.production = new List<RecipeBlueprint>();
+                    blueprint.production.Add(new RecipeBlueprint());
+                    blueprint.production[0].index = 0;
+                    blueprint.production[0].time = 0;
                 }
-            
+
+                CustomObjectData data = new CustomObjectData(blueprint.fullid,
+                    $"{blueprint.name}/{blueprint.price}/-300/Crafting -9/{blueprint.description}/true/true/0/{blueprint.name}",
+                    blueprint.getTexture(), Color.White, blueprint.tileindex, true, typeof(CustomMachine),
+                    (blueprint.crafting == null || blueprint.crafting == "")
+                        ? null
+                        : new CraftingData(blueprint.fullid, blueprint.crafting));
+
+                if (blueprint.forsale)
+                    new InventoryItem(new CustomMachine(blueprint), blueprint.price).addToNPCShop(blueprint.shop,
+                        blueprint.condition);
+            }
+
             Monitor.Log(packs.Count + " Content Packs with " + machines.Count + " machines found.", LogLevel.Trace);
         }
     }

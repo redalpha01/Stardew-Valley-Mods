@@ -18,7 +18,13 @@ namespace CustomFarmingRedux
         public string Type { get; set; } = "CustomFarming.simpleMachine";
         public string Crafting { get; set; } = "388 30";
         public int AnimationSpeed { get; set; } = 6;
-        public string Name { get => name; set => name = value; }
+
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
         public string Description { get; set; } = "Custom Machine";
         public string Tilesheet { get; set; } = "";
         public int TileIndex { get; set; } = 0;
@@ -28,7 +34,13 @@ namespace CustomFarmingRedux
         public int[] Materials { get; set; } = new int[0];
         public int MaterialQuality { get; set; } = 0;
         public int RequieredStack { get; set; } = 1;
-        public int RequiredStack { get => RequieredStack; set => RequieredStack = value; }
+
+        public int RequiredStack
+        {
+            get => RequieredStack;
+            set => RequieredStack = value;
+        }
+
         public int StarterMaterial { get; set; } = -1;
         public int StarterMaterialStack { get; set; } = 1;
         public LegacyProduce Produce { get; set; }
@@ -37,8 +49,5 @@ namespace CustomFarmingRedux
         public int displayItemX { get; set; } = 0;
         public int displayItemY { get; set; } = 0;
         public float displayItemZoom { get; set; } = 1;
-
-
-
     }
 }

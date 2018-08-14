@@ -1,29 +1,29 @@
 {
-   "name": "Mystical Machines",
-   "author": "Platonymous",
-   "version": "1.0.0",
-   "machines":
-   [
-	   {
-		   "id": 0,
-		   "legacy": "Platonymous.Mystical.TimeSphere.json",
-		   "name": "Time Sphere",
-		   "description": "Causes temporal displacemnet",
-		   "category": "Crafting",
-		   "crafting" : "335 1 70 1 62 1 60 1",
-		   "pulsate": false,
-		   "texture": "mystical.png",
-		   "shop": "Krobus",
-		   "forsale": true,
-		   "price": 100000,
-		   "readyindex": 11,
-		   "frames": 10,
-		   "starter":
+	"name": "Mystical Machines",
+	"author": "Platonymous",
+	"version": "1.0.0",
+	"machines":
+	[
+		{
+			"id": 0,
+			"legacy": "Platonymous.Mystical.TimeSphere.json",
+			"name": "Time Sphere",
+			"description": "Causes temporal displacemnet",
+			"category": "Crafting",
+			"crafting": "335 1 70 1 62 1 60 1",
+			"pulsate": false,
+			"texture": "mystical.png",
+			"shop": "Krobus",
+			"forsale": true,
+			"price": 100000,
+			"readyindex": 11,
+			"frames": 10,
+			"starter":
 			{
 				"index": 787,
 				"stack": 1
 			},
-		   "production":
+			"production":
 			[
 				{
 					"item": "Dinosaur Egg",
@@ -94,6 +94,6 @@
 					]
 				}
 			]
-	   }
-   ]
+		}
+	]
 }

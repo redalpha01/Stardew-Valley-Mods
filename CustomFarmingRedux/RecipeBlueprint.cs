@@ -27,20 +27,19 @@ namespace CustomFarmingRedux
         public string id => name + "." + index + "." + quality + "." + stack;
         public string price = "original";
         private int dropInQuality = -1;
+
         public string name
         {
             get
             {
                 if (_name == "" && index > 0)
                     _name = Game1.objectInformation[index].Split('/')[4];
-               
-                    return _name;
+
+                return _name;
             }
-            set
-            {
-                _name = value;
-            }
+            set { _name = value; }
         }
+
         public string description
         {
             get
@@ -50,11 +49,9 @@ namespace CustomFarmingRedux
                 else
                     return _description;
             }
-            set
-            {
-                _description = value;
-            }
+            set { _description = value; }
         }
+
         public string category
         {
             get
@@ -64,11 +61,9 @@ namespace CustomFarmingRedux
 
                 return _category;
             }
-            set
-            {
-                _category = value;
-            }
+            set { _category = value; }
         }
+
         public int index
         {
             get
@@ -83,10 +78,10 @@ namespace CustomFarmingRedux
                         if (item.StartsWith("random:"))
                         {
                             string[] items = item.Split(':')[1].Split(',');
-                            return Game1.bigCraftablesInformation.getIndexByName(items[rnd.Next(0,items.Length)]);
+                            return Game1.bigCraftablesInformation.getIndexByName(items[rnd.Next(0, items.Length)]);
                         }
                         else
-                        _index = Game1.bigCraftablesInformation.getIndexByName(item);
+                            _index = Game1.bigCraftablesInformation.getIndexByName(item);
                     }
                     else if (_index <= 0 && name != "")
                         _index = Game1.bigCraftablesInformation.getIndexByName(name);
@@ -106,12 +101,10 @@ namespace CustomFarmingRedux
                     else if (_index <= 0 && name != "")
                         _index = Game1.objectInformation.getIndexByName(name);
                 }
+
                 return _index;
             }
-            set
-            {
-                _index = value;
-            }
+            set { _index = value; }
         }
 
         public bool bigcraftable { get; set; } = false;
@@ -120,6 +113,7 @@ namespace CustomFarmingRedux
 
         public List<IngredientBlueprint> materials { get; set; }
         public string texture { get; set; }
+
         public int tileindex
         {
             get
@@ -129,11 +123,9 @@ namespace CustomFarmingRedux
                 else
                     return _tileindex;
             }
-            set
-            {
-                _tileindex = value;
-            }
+            set { _tileindex = value; }
         }
+
         public bool prefix { get; set; } = false;
         public bool suffix { get; set; } = false;
         public bool insert { get; set; } = false;
@@ -143,7 +135,12 @@ namespace CustomFarmingRedux
         public int time { get; set; }
         public int stack { get; set; } = 1;
         public int quality { get; set; } = 0;
-        public bool custom { get => (texture != null && texture != "") || (_description != null && _description != ""); }
+
+        public bool custom
+        {
+            get => (texture != null && texture != "") || (_description != null && _description != "");
+        }
+
         public CustomMachineBlueprint mBlueprint;
         public Texture2D texture2d;
 
@@ -156,12 +153,14 @@ namespace CustomFarmingRedux
                 dropInQuality = dropin.Quality;
 
             List<IngredientBlueprint> ingredients = materials.toList(p => p.clone());
-        
+
             foreach (IngredientBlueprint i in materials)
             {
                 for (int list = 0; list < items.Count; list++)
                     if (ingredients.Exists(e => e.index == i.index))
-                        if (items[list].ToList().Find(p => fitsIngredient(p, i) && (dropin == null || p.ParentSheetIndex == dropin.ParentSheetIndex)) is Item j)
+                        if (items[list].ToList().Find(p =>
+                            fitsIngredient(p, i) &&
+                            (dropin == null || p.ParentSheetIndex == dropin.ParentSheetIndex)) is Item j)
                         {
                             j.Stack -= i.stack;
                             int ii = ingredients.FindIndex(p => p.index == i.index);
@@ -205,7 +204,8 @@ namespace CustomFarmingRedux
                 if (texture == null || texture == "")
                     texture2d = Game1.objectSpriteSheet;
                 else
-                    texture2d = Helper.Content.Load<Texture2D>($"{mBlueprint.pack.baseFolder}/{mBlueprint.folder}/{texture}");
+                    texture2d = Helper.Content.Load<Texture2D>(
+                        $"{mBlueprint.pack.baseFolder}/{mBlueprint.folder}/{texture}");
 
             return texture2d;
         }
@@ -215,10 +215,15 @@ namespace CustomFarmingRedux
             if (quality == -1 && dropInQuality > 0 && p is SObject sbj && sbj.Quality != dropInQuality)
                 return false;
 
-            if (p is SObject obj && i.index == -999 && (i.exactquality == -1 || obj.Quality == i.exactquality) && obj.Quality >= i.quality && (i.quality >= 0 || obj.Quality < (i.quality * -1)))
+            if (p is SObject obj && i.index == -999 && (i.exactquality == -1 || obj.Quality == i.exactquality) &&
+                obj.Quality >= i.quality && (i.quality >= 0 || obj.Quality < (i.quality * -1)))
                 return true;
 
-            return p is SObject o && (exclude == null || !exclude.Contains(o.ParentSheetIndex)) && (o.ParentSheetIndex == i.index || o.Category == i.index || (include != null && (include.Contains(o.ParentSheetIndex) || include.Contains(o.Category)))) && (i.exactquality == -1 || o.Quality == i.exactquality) && o.Quality >= i.quality && (i.quality >= 0 || o.Quality < (i.quality * -1));
+            return p is SObject o && (exclude == null || !exclude.Contains(o.ParentSheetIndex)) &&
+                   (o.ParentSheetIndex == i.index || o.Category == i.index ||
+                    (include != null && (include.Contains(o.ParentSheetIndex) || include.Contains(o.Category)))) &&
+                   (i.exactquality == -1 || o.Quality == i.exactquality) && o.Quality >= i.quality &&
+                   (i.quality >= 0 || o.Quality < (i.quality * -1));
         }
 
         internal bool fitsIngredient(Item p, List<IngredientBlueprint> l)
@@ -228,7 +233,11 @@ namespace CustomFarmingRedux
                 if (p is SObject obj && i.index == -999)
                     return true;
 
-                if (p is SObject o && (exclude == null || !exclude.Contains(o.ParentSheetIndex)) && (o.ParentSheetIndex == i.index || o.Category == i.index || (include != null && (include.Contains(o.ParentSheetIndex) || include.Contains(o.Category)))) && (i.exactquality == -1 || o.Quality == i.exactquality) && o.Quality >= i.quality && (i.quality >= 0 || o.Quality < (i.quality * -1)))
+                if (p is SObject o && (exclude == null || !exclude.Contains(o.ParentSheetIndex)) &&
+                    (o.ParentSheetIndex == i.index || o.Category == i.index ||
+                     (include != null && (include.Contains(o.ParentSheetIndex) || include.Contains(o.Category)))) &&
+                    (i.exactquality == -1 || o.Quality == i.exactquality) && o.Quality >= i.quality &&
+                    (i.quality >= 0 || o.Quality < (i.quality * -1)))
                     return true;
             }
 
@@ -249,10 +258,12 @@ namespace CustomFarmingRedux
                 for (int list = 0; list < items.Count; list++)
                     if (ingredients.Exists(e => e.index == i.index))
                     {
-                        if (items[list].ToList().Find(p => fitsIngredient(p,i)) is Item j)
+                        if (items[list].ToList().Find(p => fitsIngredient(p, i)) is Item j)
                         {
                             int ii = ingredients.FindIndex(p => p.index == i.index);
-                            ingredients[ii].stack = (j.Stack - ingredients[ii].stack > 0) ? 0 : Math.Abs(j.Stack - ingredients[ii].stack);
+                            ingredients[ii].stack = (j.Stack - ingredients[ii].stack > 0)
+                                ? 0
+                                : Math.Abs(j.Stack - ingredients[ii].stack);
                             if (ingredients[ii].stack == 0)
                                 ingredients.Remove(ingredients[ii]);
                         }
@@ -266,14 +277,14 @@ namespace CustomFarmingRedux
                 return false;
         }
 
-        public void consumeIngredients(List<Item> items,  SObject dropin)
+        public void consumeIngredients(List<Item> items, SObject dropin)
         {
-            consumeIngredients(new List<IList<Item>>() { items }, dropin);
+            consumeIngredients(new List<IList<Item>>() {items}, dropin);
         }
 
         public bool hasIngredients(List<Item> items)
         {
-            return hasIngredients(new List<IList<Item>>() { items });
+            return hasIngredients(new List<IList<Item>>() {items});
         }
 
         private Color getColor(SObject input)
@@ -291,9 +302,12 @@ namespace CustomFarmingRedux
             else
             {
                 if (!custom && colored)
-                    return setNameAndQuality(new ColoredObject(index == -999 ? input.ParentSheetIndex : index, stack, getColor(input)), input);
+                    return setNameAndQuality(
+                        new ColoredObject(index == -999 ? input.ParentSheetIndex : index, stack, getColor(input)),
+                        input);
                 else if (!custom)
-                    return setNameAndQuality(new SObject(Vector2.Zero, index == -999 ? input.ParentSheetIndex : index, stack), input);
+                    return setNameAndQuality(
+                        new SObject(Vector2.Zero, index == -999 ? input.ParentSheetIndex : index, stack), input);
                 else
                     return new CustomObject(index == -999 ? input.ParentSheetIndex : index, stack, name, input, this);
             }
@@ -315,13 +329,14 @@ namespace CustomFarmingRedux
             if (s.name == null || s.name == "" || s.name == " ")
                 s.name = oName;
 
-            int compPrice = (int)(PyUtils.calc(price, new KeyValuePair<string, object>("input", input == null ? 0 : input.Price), new KeyValuePair<string, object>("original", s.Price)));
+            int compPrice = (int) (PyUtils.calc(price,
+                new KeyValuePair<string, object>("input", input == null ? 0 : input.Price),
+                new KeyValuePair<string, object>("original", s.Price)));
             s.Price = compPrice;
 
-            if(prefix || suffix || insert)
+            if (prefix || suffix || insert)
                 s.preservedParentSheetIndex.Value = -1 * input.ParentSheetIndex;
             return s;
         }
-
     }
 }

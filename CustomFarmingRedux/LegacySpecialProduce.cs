@@ -12,6 +12,7 @@ namespace CustomFarmingRedux
         public bool uc = false;
         public bool up = false;
         public bool us = false;
+
         public bool usePrefix
         {
             set
@@ -20,6 +21,7 @@ namespace CustomFarmingRedux
                 up = true;
             }
         }
+
         public bool useSuffix
         {
             set
@@ -28,6 +30,7 @@ namespace CustomFarmingRedux
                 us = true;
             }
         }
+
         public bool useColor
         {
             set
@@ -36,6 +39,7 @@ namespace CustomFarmingRedux
                 uc = true;
             }
         }
+
         public int ProduceID { get; set; } = -1;
         public string Tilesheet { get; set; }
         public int TileIndex { get; set; } = -1;
